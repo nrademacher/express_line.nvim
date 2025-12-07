@@ -40,7 +40,7 @@ local buf_lookups = {
   end,
 
   lsp = function(buffer)
-    return not vim.tbl_isempty(vim.tbl_keys(vim.lsp.buf_get_clients(buffer.bufnr)))
+    return not vim.tbl_isempty(vim.tbl_keys(vim.lsp.get_clients({ bufnr = buffer.bufnr })))
   end,
 
   is_active = function(buffer)
