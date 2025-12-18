@@ -84,7 +84,7 @@ local async_setter = function(association)
 
   return function(win_id, var_name, f, refresh_rate)
     local timer_index = string.format("%s:%s:%s", association, win_id, var_name)
-    local timer = vim.loop.new_timer()
+    local timer = vim.uv.new_timer()
 
     -- Clear any existing timers that exist for this.
     if _ElRunningTimers[timer_index] ~= nil then
