@@ -37,8 +37,8 @@ end
 
 extensions.git_changes = function(_, buffer)
   if
-    vim.api.nvim_buf_get_option(buffer.bufnr, "bufhidden") ~= ""
-    or vim.api.nvim_buf_get_option(buffer.bufnr, "buftype") == "nofile"
+    vim.bo[buffer.bufnr].bufhidden ~= ""
+    or vim.bo[buffer.bufnr].buftype == "nofile"
   then
     return
   end
