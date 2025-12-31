@@ -13,6 +13,30 @@ local lsp_statusline = require "el.plugins.lsp_status"
 
 local el = {}
 
+-- Helper function to flatten tables with compatibility for both old and new Neovim
+local function flatten_table(tbl)
+  -- For Neovim 0.10+, vim.tbl_flatten is deprecated, but vim.iter may not handle
+  -- all table structures correctly. We use vim.iter if available and the table is list-like,
+  -- otherwise fall back to a manual flatten or vim.tbl_flatten if available.
+  if vim.tbl_flatten then
+    return vim.tbl_flatten(tbl)
+  else
+    -- Manual flatten for compatibility
+    local result = {}
+    local function flatten_recursive(t)
+      for _, v in ipairs(t) do
+        if type(v) == "table" then
+          flatten_recursive(v)
+        else
+          table.insert(result, v)
+        end
+      end
+    end
+    flatten_recursive(tbl)
+    return result
+  end
+end
+
 ---@tag el
 ---@brief [[
 --- el (short for `express_line`) is a Lua statusline that I have been
@@ -67,7 +91,7 @@ local get_new_windows_table = function()
           -- Gather up functions to use when evaluating statusline
           local window = meta.Window:new(win_id)
           local buffer = meta.Buffer:new(bufnr)
-          local items = vim.iter(el.statusline_generator(window, buffer)):flatten():totable()
+          local items = flatten_table(el.statusline_generator(window, buffer))
 
           local p = processor.new(items, window, buffer)
 
