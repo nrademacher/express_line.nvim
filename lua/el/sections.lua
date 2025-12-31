@@ -10,13 +10,10 @@ sections.collapse_builtin = function(items)
 end
 
 sections.left_subsection = function(config)
-  vim.validate {
-    items = { config.items, 't' },
-
-    highlight = { config.highlight, 's', true },
-    divider = { config.divider, 's', true },
-    builtin_only = { config.builtin_only, 'b', true },
-  }
+  vim.validate("items", config.items, "table")
+  vim.validate("highlight", config.highlight, "string", true)
+  vim.validate("divider", config.divider, "string", true)
+  vim.validate("builtin_only", config.builtin_only, "boolean", true)
 
   local divider = config.divider or '>>'
   local highlight = config.highlight or nil
